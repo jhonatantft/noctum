@@ -1,120 +1,385 @@
 # Noctum - AI Meeting Assistant
 
-Noctum is a powerful, privacy-focused desktop application designed to be your intelligent meeting companion. Built with Electron, React, and TypeScript, it leverages local AI models for real-time transcription and cloud-based LLMs for intelligent insights.
+> **Your intelligent, privacy-focused meeting companion**
 
-![Noctum Screenshot](https://via.placeholder.com/800x450?text=Noctum+AI+Assistant)
+Noctum is a desktop application that provides real-time transcription and AI-powered insights during meetings. Think of it as having an expert advisor whispering smart suggestions in your ear while you talk.
 
-## 🚀 Key Features
-
-### 🎙️ Advanced Audio & Transcription
-*   **Local-First Transcription**: Uses an embedded **Whisper** model (via `@xenova/transformers`) running entirely on your device. No audio is sent to the cloud for transcription, ensuring privacy and low latency.
-*   **Real-Time Visualization**: Dynamic audio waveform visualizer.
-*   **Device Selection**: Choose your preferred microphone input from Settings.
-
-### 🧠 AI Intelligence
-*   **Smart Insights**: Automatically detects and categorizes:
-    *   ✅ **Action Items**: Tasks and to-dos.
-    *   📊 **Data Points**: Numbers, metrics, and key facts.
-    *   💡 **Key Points**: Important summaries.
-*   **BYO Key**: Supports **OpenAI** and **Anthropic** API keys for generating high-quality insights from your transcripts.
-
-### 🖥️ Desktop Integration
-*   **System Tray**: Quick access to controls from your menu bar.
-*   **Global Shortcuts**: Toggle recording instantly with `Cmd+Shift+R` (Mac) or `Ctrl+Shift+R` (Windows), even when the app is in the background.
-*   **Overlay Mode**: "Always on Top" mini-player mode for unobtrusive monitoring during calls.
-*   **Native Notifications**: Get alerted when recordings start or stop.
-
-### 💾 Management & Export
-*   **Local Database**: All meetings, transcripts, and summaries are stored locally in a **SQLite** database.
-*   **Searchable History**: Full-text search across all your past meetings.
-*   **Flexible Exports**: Export transcripts to **Markdown**, **Text**, or **JSON**.
+<p align="center">
+  <img src="https://img.shields.io/badge/Electron-30.0-47848F?logo=electron" alt="Electron">
+  <img src="https://img.shields.io/badge/React-18.2-61DAFB?logo=react" alt="React">
+  <img src="https://img.shields.io/badge/TypeScript-5.2-3178C6?logo=typescript" alt="TypeScript">
+  <img src="https://img.shields.io/badge/License-MIT-green" alt="License">
+</p>
 
 ---
 
-## 🛠️ How It Works
+## 🎯 What Does Noctum Do?
 
-Noctum is built on a modern, robust architecture designed for performance and privacy.
+Noctum turns your meetings into superpowers by:
 
-### 1. The Core (Electron & React)
-*   **Main Process**: Handles window management, native system integrations (Tray, Shortcuts), and database operations (SQLite).
-*   **Renderer Process**: A high-performance React application built with **Vite**, **Tailwind CSS**, and **shadcn/ui** for a beautiful, responsive interface.
+1. **Transcribing everything in real-time** using Deepgram's API
+2. **Generating smart AI insights** based on your meeting context (sales, pitch, interview, etc.)
+3. **Storing everything locally** in a SQLite database for privacy
+4. **Working as a desktop app** with system tray, global shortcuts, and overlay mode
 
-### 2. The Transcription Engine (Web Worker)
-To ensure the UI remains buttery smooth, the heavy lifting of transcription happens in a dedicated **Web Worker**:
-*   **Model**: We use `Xenova/whisper-tiny.en` (quantized) for a balance of speed and accuracy.
-*   **Pipeline**: Audio is captured via the Web Audio API, buffered, and sent to the worker. The worker runs the Whisper model via ONNX Runtime (WASM) to generate text.
-*   **Safety**: Includes robust error handling and timeout mechanisms to prevent hangs.
+### Real-World Example
 
-### 3. Data Persistence
-*   **SQLite (`better-sqlite3`)**: Stores structured data like meeting metadata, full transcripts, and generated insights. This ensures your data is persistent and fast to query.
-*   **Electron Store**: Manages user preferences (Theme, API Keys, Audio Settings).
+You're in a sales call. The customer says *"I'm not sure if this fits our budget..."*
 
-### 4. IPC Communication
-*   The Main and Renderer processes communicate via a secure **IPC (Inter-Process Communication)** bridge.
-*   This allows the React UI to trigger native actions (like "Toggle Overlay" or "Save to DB") and receive system events (like "Global Shortcut Triggered").
+**Noctum instantly shows:**
+- 🚨 **Objection Detected:** Price concerns
+- 💬 **Suggested Reply:** "I understand. What if we break this into quarterly payments aligned with your ROI milestones?"
+- ❓ **Smart Question:** "What budget range were you considering, and what metrics would justify the investment?"
 
 ---
 
-## 💻 Tech Stack
+## ✨ Key Features
 
-*   **Runtime**: [Electron](https://www.electronjs.org/)
-*   **Frontend**: [React](https://reactjs.org/), [TypeScript](https://www.typescriptlang.org/)
-*   **Build Tool**: [Vite](https://vitejs.dev/)
-*   **Styling**: [Tailwind CSS](https://tailwindcss.com/), [shadcn/ui](https://ui.shadcn.com/)
-*   **AI/ML**: 
-    *   `@xenova/transformers` (Local Whisper)
-    *   OpenAI / Anthropic APIs (Insights)
-*   **Database**: `better-sqlite3`
-*   **State/Storage**: `electron-store`
+### 🎙️ Real-Time Transcription
+- **Powered by Deepgram:** Industry-leading speech-to-text API
+- **Instant results:** See transcripts appear as you speak
+- **Speaker detection:** Automatically identifies different speakers
+
+### 🧠 AI Copilot Modes
+Choose the right AI advisor for your meeting:
+
+| Mode | Best For | Insight Types |
+|------|----------|---------------|
+| **General Advisor** | Strategy meetings, brainstorming | Strategic implications, smart questions |
+| **Sales Coach** | Customer calls, demos | Objection handling, closing tactics, rebuttals |
+| **Investor Pitch** | Fundraising, VC meetings | Vision feedback, investor Q&A prep |
+| **Interview Prep** | Job interviews | STAR method answers, leadership cues |
+
+### 🔒 Privacy-First Design
+- **Local database:** All meetings stored in SQLite on your machine
+- **No audio uploads:** Only text transcripts sent to AI (and only if you provide an API key)
+- **Your data, your control:** Export anytime, delete anytime
+
+### 🖥️ Desktop Native Features
+- **System Tray Integration:** Quick controls from your menu bar
+- **Global Shortcut:** `Cmd+Shift+R` (Mac) / `Ctrl+Shift+R` (Windows) to start/stop recording
+- **Overlay Mode:** Always-on-top mini window during calls
+- **Native Notifications:** Get alerts when recording starts/stops
+
+### 💾 Meeting Management
+- **Searchable history:** Find past meetings by title or content
+- **Export options:** Download as Markdown, JSON, or plain text
+- **Detailed transcripts:** View full conversation with timestamps
 
 ---
 
-## 🏁 Getting Started
+## 🏗️ How It Works
+
+Noctum uses a modern Electron + React architecture:
+
+```
+┌─────────────────────────────────────────────────────────┐
+│                    MAIN PROCESS                          │
+│  (Node.js - electron/main.ts)                           │
+│                                                          │
+│  • Window Management                                     │
+│  • System Tray & Global Shortcuts                       │
+│  • SQLite Database (meetings.db)                        │
+│  • IPC Handlers                                          │
+└─────────────────┬───────────────────────────────────────┘
+                  │ IPC Bridge
+┌─────────────────▼───────────────────────────────────────┐
+│                 RENDERER PROCESS                         │
+│  (React App - src/)                                     │
+│                                                          │
+│  ┌─────────────┐  ┌──────────────┐  ┌────────────────┐│
+│  │ Dashboard   │  │ ActiveMeeting│  │ History        ││
+│  │             │  │              │  │                ││
+│  │ Start       │→ │ 🎙️ Record   │→ │ 📚 View Past  ││
+│  │ Meeting     │  │ 📝 Transcribe│  │ 💾 Export     ││
+│  └─────────────┘  │ 🤖 AI Insights│  └────────────────┘│
+│                   └──────────────┘                      │
+│                                                          │
+│  ┌──────────────────────────────────────────────────┐  │
+│  │         HOOKS (State Management)                 │  │
+│  │  • useTranscription → Deepgram WebSocket         │  │
+│  │  • useAudioRecorder → Web Audio API              │  │
+│  │  • useMeetingPersistence → SQLite via IPC        │  │
+│  └──────────────────────────────────────────────────┘  │
+└─────────────────────────────────────────────────────────┘
+                  │
+                  ▼
+         ┌──────────────────┐
+         │  EXTERNAL APIS   │
+         │                  │
+         │  • Deepgram      │ (Transcription)
+         │  • OpenAI        │ (AI Insights)
+         │  • Anthropic     │ (Alternative AI)
+         │  • Google Gemini │ (Alternative AI)
+         └──────────────────┘
+```
+
+### Data Flow: Recording a Meeting
+
+1. **User clicks "Start Recording"** in `ActiveMeeting.tsx`
+2. **`useAudioRecorder`** captures microphone via Web Audio API
+3. **`useTranscription`** opens WebSocket to Deepgram, streams audio chunks
+4. **Deepgram sends back transcripts** (partial → final)
+5. **Transcripts appear in UI** in real-time
+6. **Every 5 seconds**, `AIService.analyzeTranscript()` sends text to OpenAI/Anthropic/Gemini
+7. **AI returns insights** (questions, strategies, objections, etc.)
+8. **Insights displayed** in the sidebar
+9. **On stop**, `useMeetingPersistence` saves to SQLite via IPC
+
+---
+
+## 🚀 Getting Started
 
 ### Prerequisites
-*   Node.js (v18 or higher)
-*   Yarn
+
+- **Node.js** v18 or higher
+- **Yarn** package manager
+- **Deepgram API Key** (required) → [Get it here](https://console.deepgram.com/)
+- **AI API Key** (optional) → [OpenAI](https://platform.openai.com/api-keys), [Anthropic](https://console.anthropic.com/), or [Google AI](https://aistudio.google.com/app/apikey)
 
 ### Installation
 
-1.  **Clone the repository**:
-    ```bash
-    git clone https://github.com/yourusername/noctum.git
-    cd noctum
-    ```
+1. **Clone the repository**
+   ```bash
+   git clone https://github.com/yourusername/noctum.git
+   cd noctum
+   ```
 
-2.  **Install dependencies**:
-    ```bash
-    yarn install
-    ```
+2. **Install dependencies**
+   ```bash
+   yarn install
+   ```
 
-### Development
+3. **Set up environment variables**
+   ```bash
+   cp .env.example .env
+   ```
 
-Run the app in development mode with hot-reloading:
+   Edit `.env` and add your API keys:
+   ```bash
+   # Required
+   VITE_DEEPGRAM_API_KEY=your-deepgram-api-key
 
-```bash
-yarn dev
-```
+   # Optional (pick one for AI insights)
+   VITE_OPENAI_API_KEY=your-openai-key
+   # OR
+   VITE_ANTHROPIC_API_KEY=your-anthropic-key
+   # OR
+   VITE_GEMINI_API_KEY=your-gemini-key
+   ```
 
-### Build
+4. **Run in development mode**
+   ```bash
+   yarn dev
+   ```
 
-Build the application for production (macOS/Windows/Linux):
-
-```bash
-yarn build
-```
-
-The distributable files (DMG, Exe, etc.) will be generated in the `release` directory.
+   The Electron app will launch with hot-reloading enabled.
 
 ---
 
-## 🔒 Privacy
+## 📖 User Guide
 
-Noctum is designed with a "Local First" philosophy:
-*   **Audio**: Processed 100% locally. Never uploaded.
-*   **Transcripts**: Stored locally in your SQLite database.
-*   **AI Insights**: Only the text transcript is sent to the AI provider (OpenAI/Anthropic) if you provide an API key. You control your data.
+### Starting Your First Meeting
+
+1. **Launch Noctum** and go to **Active Meeting**
+2. **Allow microphone access** when prompted
+3. **Choose an AI mode** (General, Sales, Pitch, or Interview)
+4. **Click the Record button** or press `Cmd+Shift+R`
+5. **Start talking!** Transcripts and insights appear in real-time
+6. **Stop recording** when done, give your meeting a title, and save
+
+### Configuring AI Settings
+
+1. Go to **Settings** → **AI Configuration**
+2. Select your preferred provider (OpenAI, Anthropic, or Gemini)
+3. Enter your API key
+4. Click **Save Configuration**
+
+> **Note:** AI insights won't work without an API key. You can still get transcripts without one!
+
+### Viewing Past Meetings
+
+1. Go to **History**
+2. Use the search bar to find meetings
+3. Click on a meeting to view full transcript
+4. Export as Markdown, JSON, or text using the buttons
+
+### Using Overlay Mode
+
+Perfect for Zoom/Teams calls:
+
+1. Start a meeting in **Active Meeting**
+2. Click the **Overlay** button
+3. Noctum shrinks to a small window in the top-right corner
+4. View transcripts without covering your video call
+
+---
+
+## 🛠️ Development
+
+### Project Structure
+
+```
+noctum/
+├── electron/              # Electron main process
+│   ├── main.ts           # Entry point, window management, IPC
+│   ├── preload.ts        # Secure IPC bridge
+│   └── db.ts             # SQLite database operations
+├── src/                  # React renderer process
+│   ├── pages/            # Main views
+│   │   ├── Dashboard.tsx
+│   │   ├── ActiveMeeting.tsx
+│   │   ├── History.tsx
+│   │   └── Settings.tsx
+│   ├── hooks/            # Custom React hooks
+│   │   ├── useTranscription.ts    # Deepgram integration
+│   │   ├── useAudioRecorder.ts    # Web Audio API
+│   │   └── useMeetingPersistence.ts # SQLite via IPC
+│   ├── lib/
+│   │   └── ai.ts         # AI service (OpenAI/Anthropic/Gemini)
+│   ├── components/       # Reusable UI components
+│   └── App.tsx           # Router setup
+├── .env                  # Your API keys (not in git)
+├── .env.example          # Template for .env
+└── package.json
+```
+
+### Available Scripts
+
+```bash
+# Development
+yarn dev          # Run with hot-reload
+
+# Linting
+yarn lint         # Check code quality
+
+# Production Build
+yarn build        # Build and package app (creates DMG/EXE in /release)
+```
+
+### Key Technologies
+
+| Layer | Technology | Purpose |
+|-------|-----------|---------|
+| **Desktop** | Electron 30 | Native app wrapper |
+| **UI** | React 18 + TypeScript | Component-based UI |
+| **Styling** | Tailwind CSS + shadcn/ui | Modern, responsive design |
+| **Build** | Vite | Fast bundler with HMR |
+| **Transcription** | Deepgram SDK | Real-time speech-to-text |
+| **AI** | OpenAI / Anthropic / Gemini | Smart insights generation |
+| **Database** | better-sqlite3 | Local meeting storage |
+| **State** | React Hooks + electron-store | Preferences & session state |
+
+### Adding New AI Modes
+
+Edit `src/lib/ai.ts`:
+
+```typescript
+const PROMPTS: Record<MeetingMode, string> = {
+  // ... existing modes
+  doctor: `
+    You are a Medical AI Assistant. Help the doctor make informed decisions.
+
+    Analyze the transcript for:
+    1. "strategy": Differential diagnosis suggestions
+    2. "question": Follow-up questions for patient history
+  `
+};
+```
+
+Then update the `MeetingMode` type and add UI in `ActiveMeeting.tsx`.
+
+---
+
+## 🔐 Privacy & Security
+
+### What Data Stays Local?
+
+- ✅ **Audio recordings:** Never sent anywhere (captured but not saved)
+- ✅ **SQLite database:** Stored at `~/Library/Application Support/Noctum/meetings.db` (macOS)
+- ✅ **API keys:** Stored in localStorage (renderer) or electron-store (main)
+
+### What Gets Sent to Cloud?
+
+- 📤 **Audio stream:** Sent to Deepgram for transcription (required)
+- 📤 **Text transcripts:** Sent to OpenAI/Anthropic/Gemini for insights (only if you provide a key)
+
+### How to Export Your Data
+
+```bash
+# Meetings are stored in:
+# macOS:   ~/Library/Application Support/Noctum/
+# Windows: %APPDATA%\Noctum\
+# Linux:   ~/.config/Noctum/
+
+# You can export from the UI or directly access meetings.db with sqlite3
+```
+
+---
+
+## 🐛 Troubleshooting
+
+### Transcription Not Working?
+
+1. **Check Deepgram API key** in `.env`
+2. **Allow microphone permissions** in Settings → Audio
+3. **Check DevTools Console** (Cmd+Option+I) for errors
+4. **Verify internet connection** (Deepgram requires connectivity)
+
+### AI Insights Not Showing?
+
+1. Go to **Settings → AI Configuration**
+2. Ensure you've entered an API key
+3. Verify the correct provider is selected
+4. Check if you have API credits remaining
+
+### Database Errors?
+
+```bash
+# Reset database (deletes all meetings!)
+rm ~/Library/Application\ Support/Noctum/meetings.db
+```
+
+---
+
+## 🗺️ Roadmap
+
+- [ ] **Speaker diarization improvements** (auto-detect who's talking)
+- [ ] **Meeting summaries** (auto-generate TL;DR after call)
+- [ ] **Calendar integration** (auto-start recording for scheduled meetings)
+- [ ] **Custom AI prompts** (user-defined coaching modes)
+- [ ] **Cloud sync** (optional backup to Dropbox/Google Drive)
+- [ ] **Meeting analytics** (insights over time)
+
+---
 
 ## 📄 License
 
 MIT © [Your Name]
+
+Built with ❤️ using Electron, React, and TypeScript.
+
+---
+
+## 🙏 Credits
+
+- **Deepgram** - Real-time transcription API
+- **shadcn/ui** - Beautiful UI components
+- **Lucide Icons** - Icon library
+- **Electron Community** - For the amazing framework
+
+---
+
+## 🤝 Contributing
+
+Contributions are welcome! Please:
+
+1. Fork the repo
+2. Create a feature branch (`git checkout -b feature/amazing-feature`)
+3. Commit changes (`git commit -m 'Add amazing feature'`)
+4. Push to branch (`git push origin feature/amazing-feature`)
+5. Open a Pull Request
+
+---
+
+**Questions?** Open an issue or reach out!
